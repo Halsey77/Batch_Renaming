@@ -1,7 +1,9 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,6 +20,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
+using RenameRules;
+using System.Diagnostics;
 
 namespace WpfApp1
 {
@@ -26,25 +30,40 @@ namespace WpfApp1
     /// </summary>
 
 
-    
+
     public partial class MainWindow : Window
     {
-      
+        public List<IRenameRule> Rules;
+        Dictionary<string, IRenameRule> _nameRules = null;
         public MainWindow()
         {
             InitializeComponent();
-            string dllFile = @"D:\lap trinh windows\minh\RenamingRules\RenamingRules\bin\Debug\RenamingRules.dll";
-            var assembly=Assembly.LoadFile(dllFile);
-            var type = assembly.GetType("RenamingRules.Rules");
-            var method = type.GetMethod("UpperCase");
-            var obj = Activator.CreateInstance(type);
-            if (method != null)
+            var exeFolder = AppDomain.CurrentDomain.BaseDirectory;
+            var dlls = new DirectoryInfo(exeFolder).GetFiles("*.dll");
+
+            foreach (var dll in dlls)
             {
-                 var result=method.Invoke(obj, null);
-                Console.WriteLine(result);
+                var assembly = Assembly.LoadFile(dll.FullName);
+                var types = assembly.GetTypes();
+
+                foreach (var type in types)
+                {
+                    Debug.WriteLine(type);
+                    if (type.IsClass)
+                    {
+                        if (typeof(IRenameRule).IsAssignableFrom(type))
+                        {
+                            var shape = Activator.CreateInstance(type) as IRenameRule;
+                            if (shape != null)
+                            {
+                                _nameRules.Add(shape.Name, shape);
+                            }
+                        }
+                    }
+                }
             }
 
-
+            Debug.WriteLine("Hello");
         }
         public class Information : INotifyPropertyChanged
         {
@@ -135,132 +154,16 @@ namespace WpfApp1
             }
         }
 
-        public interface RenameRule
-        {
-
-            string Process(string origin);
-        }
-        public class Replacer : RenameRule
-        {
-            public string _needle { get; set; }
-            public string _hammer { get; set; }
-            public string Process(string origin)
-            {
-                var needle = _needle;
-                var hammer = _hammer;
-                string res = "";
-                // neu chuoi needle khong chua hoac khong ton tai thi khong phai thay the
-                if(!origin.Contains(needle)||String.IsNullOrEmpty(needle))
-                {
-                    res = origin;
-                }
-                else
-                {
-                    res = origin.Replace(needle, hammer);
-                }
-                return res;
-            }
-        }
-        // viet in hoa
-        public class UpperCase : RenameRule
-        {
-            public string Process(string origin)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(origin);
-                string res = fileName.ToUpper() + Path.GetExtension(origin);
-                return res;
-            }
-        }
-        public class LowerCase : RenameRule
-        {
-            public string Process(string origin)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(origin);
-                string res = fileName.ToLower() + Path.GetExtension(origin);
-                return res;
-            }
-        }
+     
+     
 
         // chu cai dau viet hoa
-        public class SpecialCase : RenameRule
-        {
-            public string Process(string origin)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(origin).ToLower();
-                string res = fileName.First().ToString().ToUpper() + fileName.Substring(1) + Path.GetExtension(origin);
-                return res;
-            }
-        }
-        //ki tu dau khong the la khoang trang va so, ki tu cuoi khong the la khong trang 
-        // bo cac khoang trong >1 giua cac tu 
-        // viet hoa sau " "neu la chu cai
-        public class PerfectCase : RenameRule
-        {
-            public string Process(string origin)
-            {
-                string res = "";
-                string fileName = Path.GetFileNameWithoutExtension(origin);
-                // loai bo khoang trong o dau dong va so 
-                while(!Char.IsLetter(fileName,0))
-                {
-                    fileName = fileName.Remove(0, 1);
-                }    
-                while(!Char.IsWhiteSpace(fileName[fileName.Length-1]))
-                {   
-                    fileName = fileName.Remove(fileName.Length - 1, 1);
-                }    
-                for(int i=0;i<fileName.Length;i++)
-                {
-                    if(i==0)
-                    {
-                        res=res+Char.ToUpper(fileName[i]);
-                    }    
-                    else if(Char.IsWhiteSpace(fileName[i-1])&&Char.IsLetter(fileName[i]))
-                    {
-                        res = res + " " + Char.ToUpper(fileName[i]);
-                    }    
-                    else if(Char.IsWhiteSpace(fileName[i-1])&&!Char.IsWhiteSpace(fileName[i]))
-                    {
-                        res = res + " " + fileName[i];
-                    }    
-                    else if(!Char.IsWhiteSpace(fileName[i]))
-                    {
-                        res = res + fileName[i];
-                    }    
-                }
-                res = res + Path.GetExtension(origin);
-                return res;
-
-            }
-             
-        }
-
-        // tao mot ten ngau nhien
-        public class UniqueName : RenameRule
-        {
-            public string Process(string origin)
-            {
-                string fileName = Path.GetFileNameWithoutExtension(origin);
-                var originalGuild = new Guid();
-                string res = fileName + originalGuild.ToString();
-                return res;
-            }
-        }
+       
 
 
 
        
 
-
-        private void ClickSavePresetButton(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ClickRemovePresetButton(object sender, RoutedEventArgs e)
-        {
-
-        }
         BindingList<Information> info = new BindingList<Information>();
         
         private void ClickBrowseFolders(object sender, RoutedEventArgs e)

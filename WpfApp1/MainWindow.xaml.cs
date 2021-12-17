@@ -22,6 +22,7 @@ using System.Windows.Shapes;
 using Path = System.IO.Path;
 using RenameRules;
 using System.Diagnostics;
+using Fluent;
 
 namespace WpfApp1
 {
@@ -31,10 +32,10 @@ namespace WpfApp1
 
 
 
-    public partial class MainWindow : Window
+    public partial class MainWindow : RibbonWindow
     {
         public List<IRenameRule> Rules;
-        Dictionary<string, IRenameRule> _nameRules = null;
+        Dictionary<string, IRenameRule> _nameRules = new Dictionary<string, IRenameRule>();
         public MainWindow()
         {
             InitializeComponent();

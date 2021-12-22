@@ -42,7 +42,7 @@ namespace WpfApp1
             dialog.InitialDirectory = "D:\\";
             dialog.Multiselect = true;
             dialog.IsFolderPicker = true;
-
+            bool exist = false;
             // tao dialog co muon xoa ko 
             if (info.Count>0)
             {
@@ -59,8 +59,21 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for(int i=0;i<dirs.Length;i++)
                 {
+                    
                     FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), "", "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
-                    info.Add(info1);
+                    exist = false;
+                    foreach (FileInfo info2 in info)
+                    {
+                        if(info2._name==info1._name&&info2._extension==info1._extension)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (exist == false)
+                    {
+                        info.Add(info1);
+                    }
                 }
                 foreach(FileInfo info2 in info)
                 {
@@ -77,7 +90,7 @@ namespace WpfApp1
             dialog.InitialDirectory = "D:\\";
             dialog.Multiselect = true;
             dialog.IsFolderPicker = false;
-
+            bool exist = false;
             // tao dialog co muon xoa ko 
             if (info.Count > 0)
             {

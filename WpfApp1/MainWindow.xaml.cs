@@ -43,15 +43,8 @@ namespace WpfApp1
             dialog.Multiselect = true;
             dialog.IsFolderPicker = true;
             bool exist = false;
-            // tao dialog co muon xoa ko 
-            if (info.Count>0)
-            {
-                info.Clear();
-            }
-            if(listView.Items.Count>0)
-            {
-                listView.Items.Clear();
-            }
+       
+          
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var fileNames=dialog.FileNames;
@@ -62,6 +55,7 @@ namespace WpfApp1
                     
                     FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), "", "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
+                    // kiem tra file da ton tai chua 
                     foreach (FileInfo info2 in info)
                     {
                         if(info2._name==info1._name&&info2._extension==info1._extension)
@@ -92,14 +86,7 @@ namespace WpfApp1
             dialog.IsFolderPicker = false;
             bool exist = false;
             // tao dialog co muon xoa ko 
-            if (info.Count > 0)
-            {
-                info.Clear();
-            }
-            if (listView.Items.Count > 0)
-            {
-                listView.Items.Clear();
-            }
+           
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var fileNames = dialog.FileNames;
@@ -108,8 +95,22 @@ namespace WpfApp1
                 for (int i = 0; i < dirs.Length; i++)
                 {
                     FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), "", "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
-                    info.Add(info1);
+                    exist = false;
+                    // kiem tra file da ton tai chua 
+                    foreach (FileInfo info2 in info)
+                    {
+                        if (info2._name == info1._name && info2._extension == info1._extension)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (exist == false)
+                    {
+                        info.Add(info1);
+                    }
                 }
+                listView.Items.Clear();
                 foreach (FileInfo info2 in info) 
                 {
                     listView.Items.Add(info2);

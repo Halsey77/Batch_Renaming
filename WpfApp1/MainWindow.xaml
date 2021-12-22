@@ -1,9 +1,10 @@
-﻿<Window x:Class="WpfApp1.MainWindow"
+﻿<Fluent:RibbonWindow x:Class="WpfApp1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
+        xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -31,146 +32,187 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-
         </Style>
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="290"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="120"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height = "80" />
-            <RowDefinition Height = "*" />
-            <RowDefinition Height = "70"/>
-        </Grid.RowDefinitions>
+    <DockPanel LastChildFill="True">
+        <!--Ribbon-->
+        <Fluent:Ribbon DockPanel.Dock="Top">
+            <!--Home Tabs-->
+            <Fluent:RibbonTabItem Header="Home">
+                <Fluent:RibbonGroupBox Header="Files">
+                    <Fluent:Button Header="Add" LargeIcon="icons/addFile.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Remove" LargeIcon="icons/removeFile.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Rename" LargeIcon="icons/edit.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Edit">
+                    <Fluent:Button Header="Copy" LargeIcon="icons/copy.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Paste" LargeIcon="icons/paste.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Cut" LargeIcon="icons/scissor.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Project">
+                    <Fluent:Button Header="Refresh" LargeIcon="icons/refresh.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Preview" LargeIcon="icons/preview.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Run" LargeIcon="icons/play.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Support">
+                    <Fluent:Button Header="Help" LargeIcon="icons/help.png" Margin="3, 0"/>
+                    <Fluent:Button Header="About us" LargeIcon="icons/aboutus.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <!--Home Tabs end here-->
+            <!--Rules Tabs-->
+            <Fluent:RibbonTabItem Header="Rules">
+                <Fluent:RibbonGroupBox Header="Editing">
+                    <Fluent:Button Header="Add" LargeIcon="icons/plus.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Remove" LargeIcon="icons/minus.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Edit" LargeIcon="icons/editRule.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Presets">
+                    <Fluent:Button Header="Save" LargeIcon="icons/save.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Load" LargeIcon="icons/import.png" Margin="3, 0"/>
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+            <!--Rules Tabs end here-->
+        </Fluent:Ribbon>
 
+        <!--Các nội dung chính của chương trình-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="290"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height = "80" />
+                <RowDefinition Height = "*" />
+                <RowDefinition Height = "70"/>
+            </Grid.RowDefinitions>
 
-        <!-- Group Presets -->
-        <GroupBox Grid.Row="0" HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" FontSize="13" FontWeight="Bold">
-            <GroupBox.Header>
-                Presets
-            </GroupBox.Header>
-            <Grid>
-               
-            </Grid>
-        </GroupBox>
+            <!-- Group Presets -->
+            <GroupBox Grid.Row="0" HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" FontSize="13" FontWeight="Bold">
+                <GroupBox.Header>
+                    Presets
+                </GroupBox.Header>
+                <Grid>
 
-        <!-- 2 nut bam START va PREVIEW -->
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-            
-            <!--<Button Width="150" Height="50" Cursor="Hand" Margin="10 0 0 20" Name="BatchButton" Click="BatchButton_Click">
+                </Grid>
+            </GroupBox>
+
+            <!-- 2 nut bam START va PREVIEW -->
+            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+
+                <!--<Button Width="150" Height="50" Cursor="Hand" Margin="10 0 0 20" Name="BatchButton" Click="BatchButton_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="icons/tichxanh.png" Height="36" RenderOptions.BitmapScalingMode="HighQuality" Margin="-5 0 5 0"/>
                     <TextBlock Text="START BATCH" VerticalAlignment="Center" FontWeight="ExtraBold" />
                 </StackPanel>
             </Button>-->
 
-        </StackPanel>
-
-        <!-- TextBox Path va 2 button browse + refresh -->
-        <TextBox Grid.Column="1" Grid.Row="0" Margin="14,20,5,35" x:Name="DirectoryofFile" TextWrapping="Wrap"  IsReadOnly="True" IsEnabled="False"/>
-
-        <Canvas Grid.Column="2" Grid.Row="0">
-            <Button  Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="5" Click="ClickBrowseFiles" >
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Source="icons/addFile.png"  RenderOptions.BitmapScalingMode="HighQuality" />
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <Button  Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="40" Click="ClickBrowseFolders" >
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Source="icons/addFolder.png"  RenderOptions.BitmapScalingMode="HighQuality" />
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <Button   Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="75"  Click="ClickRefreshButton">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Image Source="icons/refresh2.png"  RenderOptions.BitmapScalingMode="HighQuality" />
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
-        </Canvas>
-
-        <!-- LISTVIEW sieu to -->
-        <ListView Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Name="listView" Margin="14,53,13,20" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
-                    <GridViewColumn Header="New name" Width="200" DisplayMemberBinding="{Binding NewName}" />
-                    <GridViewColumn Header="Status" Width="80" DisplayMemberBinding="{Binding Status}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
-        <!-- DANH SACH CAC METHOD  (CHUA XU LY RESPONSIVE) -->
-        <ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0 0 0 10" VerticalScrollBarVisibility="Hidden">
-            <StackPanel Orientation="Vertical" Margin="10,10,10,10">
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Name="ReplaceBox" Content="Replace" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Expander.Header>
-
-                    <StackPanel  Margin="20 5 0 0">
-                        <TextBox Name="TextNeedle"  Style="{StaticResource MyWaterMarkStyle}" Tag="Search text" Height="30" Margin="0 0 10 0" Cursor="Pen"></TextBox>
-                        <TextBox Name="TextHammer" Style="{StaticResource MyWaterMarkStyle}" Tag="New text" Height="30" Margin="0 0 10 0" Cursor="Pen"></TextBox>
-                    </StackPanel>
-                </Expander>
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Name="NewCaseBox" Content="New Case" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Expander.Header>
-                    <StackPanel Height="50"  Margin="20 5 0 0">
-                        <RadioButton IsChecked="True" Name="radioUpperAll" GroupName="NewCaseRadio" Content="All is uppercase"/>
-                        <RadioButton Name="radioLowerAll" GroupName="NewCaseRadio" Content="All is lowercase"/>
-                        <RadioButton Name="radioUpperFirstOne" GroupName="NewCaseRadio" Content="Capitalize the first letter"/>
-                    </StackPanel>
-                </Expander>
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Name ="FullNameNormalizeBox" Content="Full Name Normalize" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Expander.Header>
-                    <StackPanel  Margin="20 5 0 0">
-                        <TextBlock Text="The name is defined as the following requirements: Start and end with no spaces, each word starts with a capital letter, the remaining characters are written lower, there is no more than one space between words." 
-                             TextWrapping="WrapWithOverflow">
-                        </TextBlock>
-                    </StackPanel>
-                </Expander>
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Content="Move" Name="MoveBox" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Expander.Header>
-                    <StackPanel Height="35" Margin="20 5 0 0">
-                        <RadioButton IsChecked="True" Name="IDFirstRadio"  GroupName="MoveRadio" Content="Put the ID first" />
-                        <RadioButton Name="NameFirstRadio" GroupName="MoveRadio" Content="Put the Name first"/>
-                    </StackPanel>
-                </Expander>
-                <Expander>
-                    <Expander.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox Name ="UniqueNameBox" Content="Unique name" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
-                        </StackPanel>
-                    </Expander.Header>
-                    <StackPanel Margin="20 5 0 0">
-                        <TextBlock Text="To quickly rename some returned images and insert them into the Database without duplication, turn the name of each file downloaded into a GUID so that it has a unique name." 
-                               TextWrapping="WrapWithOverflow">
-                        </TextBlock>
-                    </StackPanel>
-                </Expander>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
-</Window>
+
+            <!-- TextBox Path va 2 button browse + refresh -->
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="14,20,5,35" x:Name="DirectoryofFile" TextWrapping="Wrap"  IsReadOnly="True" IsEnabled="False"/>
+
+            <Canvas Grid.Column="2" Grid.Row="0">
+                <Button  Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="5" Click="ClickBrowseFiles" >
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="icons/addFile.png"  RenderOptions.BitmapScalingMode="HighQuality" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="40" Click="ClickBrowseFolders" >
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="icons/addFolder.png"  RenderOptions.BitmapScalingMode="HighQuality" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button   Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="75"  Click="ClickRefreshButton">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Source="icons/refresh.png"  RenderOptions.BitmapScalingMode="HighQuality" />
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Canvas>
+
+            <!-- LISTVIEW sieu to -->
+            <ListView Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3" Name="listView" Margin="14,53,13,20" >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="New name" Width="200" DisplayMemberBinding="{Binding NewName}" />
+                        <GridViewColumn Header="Status" Width="80" DisplayMemberBinding="{Binding Status}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <!-- DANH SACH CAC METHOD  (CHUA XU LY RESPONSIVE) -->
+            <ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0 0 0 10" VerticalScrollBarVisibility="Hidden">
+                <StackPanel Orientation="Vertical" Margin="10,10,10,10">
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name="ReplaceBox" Content="Replace" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Expander.Header>
+
+                        <StackPanel  Margin="20 5 0 0">
+                            <TextBox Name="TextNeedle"  Style="{StaticResource MyWaterMarkStyle}" Tag="Search text" Height="30" Margin="0 0 10 0" Cursor="Pen"></TextBox>
+                            <TextBox Name="TextHammer" Style="{StaticResource MyWaterMarkStyle}" Tag="New text" Height="30" Margin="0 0 10 0" Cursor="Pen"></TextBox>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name="NewCaseBox" Content="New Case" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Height="50"  Margin="20 5 0 0">
+                            <RadioButton IsChecked="True" Name="radioUpperAll" GroupName="NewCaseRadio" Content="All is uppercase"/>
+                            <RadioButton Name="radioLowerAll" GroupName="NewCaseRadio" Content="All is lowercase"/>
+                            <RadioButton Name="radioUpperFirstOne" GroupName="NewCaseRadio" Content="Capitalize the first letter"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name ="FullNameNormalizeBox" Content="Full Name Normalize" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel  Margin="20 5 0 0">
+                            <TextBlock Text="The name is defined as the following requirements: Start and end with no spaces, each word starts with a capital letter, the remaining characters are written lower, there is no more than one space between words." 
+                             TextWrapping="WrapWithOverflow">
+                            </TextBlock>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Content="Move" Name="MoveBox" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Height="35" Margin="20 5 0 0">
+                            <RadioButton IsChecked="True" Name="IDFirstRadio"  GroupName="MoveRadio" Content="Put the ID first" />
+                            <RadioButton Name="NameFirstRadio" GroupName="MoveRadio" Content="Put the Name first"/>
+                        </StackPanel>
+                    </Expander>
+                    <Expander>
+                        <Expander.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Name ="UniqueNameBox" Content="Unique name" Margin="5 0 0 0" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Expander.Header>
+                        <StackPanel Margin="20 5 0 0">
+                            <TextBlock Text="To quickly rename some returned images and insert them into the Database without duplication, turn the name of each file downloaded into a GUID so that it has a unique name." 
+                               TextWrapping="WrapWithOverflow">
+                            </TextBlock>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Fluent:RibbonWindow>

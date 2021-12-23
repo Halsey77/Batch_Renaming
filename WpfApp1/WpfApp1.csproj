@@ -147,6 +147,7 @@
     <Content Include="icons\aboutus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="icons\add.png" />
     <Content Include="icons\copy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

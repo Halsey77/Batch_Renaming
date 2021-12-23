@@ -26,12 +26,33 @@ using Fluent;
 
 namespace WpfApp1
 {
+ 
+
+
+
     public partial class MainWindow : RibbonWindow
     {
+        private List<IRenameRule> rules = new List<IRenameRule>();
+        private List<IRenameRule> ruleSource= new List<IRenameRule>();
+       
+        private RenameFactory.RenameFactory factory = RenameFactory.RenameFactory.getInstance();
+
         public MainWindow()
         {
             InitializeComponent();
+            var lines = File.ReadLines("rules.txt");
+            foreach (var line in lines)
+            {
+                rules.Add(factory.Create(line));
+                
+            }
+            
+            RuleComboBox.ItemsSource= rules;
+            RuleListBox.ItemsSource = ruleSource;
+            
         }
+        
+
 
         BindingList<FileInfo> info = new BindingList<FileInfo>();
 
@@ -141,6 +162,42 @@ namespace WpfApp1
         private void ContextMenuClearClicked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void AddRuleButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedRule = RuleComboBox.SelectedItem as IRenameRule;
+            var instance = selectedRule.Clone();
+            ruleSource.Add(instance);
+            RuleListBox.Items.Refresh();
+
+
+
+        }
+
+        private void IsActivate_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddRule_Click(object sender, RoutedEventArgs e)
+        {
+            if(RuleComboBox.IsDropDownOpen==false)
+            {
+                RuleComboBox.IsDropDownOpen = true;
+            }    
+        }
+
+        private void EditRule_Click(object sender, RoutedEventArgs e)
+        {
+            if (RuleListBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select at least one rule in rules list to continue.", "Error");
+            }
+            else
+            {
+
+            }    
         }
     }
 }

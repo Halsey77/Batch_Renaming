@@ -63,9 +63,9 @@
             <!--Rules Tabs-->
             <Fluent:RibbonTabItem Header="Rules">
                 <Fluent:RibbonGroupBox Header="Editing">
-                    <Fluent:Button Header="Add" LargeIcon="icons/plus.png" Margin="3, 0"/>
-                    <Fluent:Button Header="Remove" LargeIcon="icons/minus.png" Margin="3, 0"/>
-                    <Fluent:Button Header="Edit" LargeIcon="icons/editRule.png" Margin="3, 0"/>
+                    <Fluent:Button Header="Add" LargeIcon="icons/plus.png" Margin="3, 0" Click="AddRule_Click"/>
+                    <Fluent:Button Header="Remove" LargeIcon="icons/minus.png" Margin="3, 0" Click="RemoveRule_Click"/>
+                    <Fluent:Button Header="Edit" LargeIcon="icons/editRule.png" Margin="3, 0" Click="EditRule_Click"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Presets">
                     <Fluent:Button Header="Save" LargeIcon="icons/save.png" Margin="3, 0"/>
@@ -151,7 +151,7 @@
             </ListView>
 
             <!-- DANH SACH CAC METHOD  (CHUA XU LY RESPONSIVE) -->
-            <ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0 0 0 10" VerticalScrollBarVisibility="Hidden">
+            <!--<ScrollViewer Grid.Row="1" Grid.Column="0" Margin="0 0 0 10" VerticalScrollBarVisibility="Hidden">
                 <StackPanel Orientation="Vertical" Margin="10,10,10,10">
                     <Expander>
                         <Expander.Header>
@@ -213,7 +213,36 @@
                         </StackPanel>
                     </Expander>
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
+            <GroupBox Header="Insert Rule" Canvas.Top="128" Height="57" Canvas.Left="33" Margin="22,10,10,96" Grid.Row="1"/>
+            <ComboBox Name ="RuleComboBox" Canvas.Left="45" Canvas.Top="153" SelectedIndex="0" Margin="42,30,54,103" Grid.Row="1" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Name ="addRuleButton" Height="24" Width="24" Background="{x:Null}" BorderBrush="White"  Click="AddRuleButton_Click" Margin="256,30,10,109" Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/icons/add.png" Height="24" Width="24" RenderTransformOrigin="0.273,0.955"/>
+                </StackPanel>
+            </Button>
+
+            <GroupBox Header="Rules List" Canvas.Left="33" Margin="22,67,34,3" Grid.RowSpan="2" Grid.Row="1"/>
+            <ListBox Name="RuleListBox" Canvas.Left="45" Canvas.Top="214" Margin="53,87,65,10" Grid.RowSpan="2" Grid.Row="1">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                      
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <WrapPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Name}"/>
+                        </WrapPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </DockPanel>
 </Fluent:RibbonWindow>

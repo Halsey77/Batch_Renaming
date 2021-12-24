@@ -190,14 +190,24 @@ namespace WpfApp1
 
         private void EditRule_Click(object sender, RoutedEventArgs e)
         {
-            if (RuleListBox.SelectedItem == null)
+            Window editWindow=new EditWindow();
+            editWindow.ShowDialog();
+
+        }
+
+        private void RemoveRule_Click(object sender, RoutedEventArgs e)
+        {
+            if(RuleListBox.SelectedItem==null)
             {
-                MessageBox.Show("Please select at least one rule in rules list to continue.", "Error");
+                MessageBox.Show("Please choose an item in rules list to delete");
             }
             else
             {
+                IRenameRule selected=RuleListBox.SelectedItem as IRenameRule;
+                ruleSource.Remove(selected);
+                RuleListBox.Items.Refresh();
 
-            }    
+            }
         }
     }
 }

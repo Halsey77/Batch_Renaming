@@ -49,12 +49,50 @@ namespace WpfApp1
             
             RuleComboBox.ItemsSource= rules;
             RuleListBox.ItemsSource = ruleSource;
-            
+       
+
+
         }
         
 
+        private void ListView_Drop(object sender, DragEventArgs e)
+        {
+            bool exist = false;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                var dirs = (string[])e.Data.GetData(DataFormats.FileDrop);
+                for (int i = 0; i < dirs.Length; i++)
+                {
 
-        BindingList<FileInfo> info = new BindingList<FileInfo>();
+                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    exist = false;
+                    // kiem tra file da ton tai chua 
+                    foreach (Fileformationo info2 in info)
+                    {
+                        if (info2._name == info1._name && info2._extension == info1._extension)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (exist == false)
+                    {
+                        info.Add(info1);
+                    }
+                }
+                listView.Items.Clear();
+                foreach (Fileformationo info2 in info)
+                {
+                    listView.Items.Add(info2);
+
+                }
+                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+            }
+        }
+
+
+        BindingList<Fileformationo> info = new BindingList<Fileformationo>();
 
         private void ClickBrowseFolders(object sender, RoutedEventArgs e)
         {
@@ -74,10 +112,10 @@ namespace WpfApp1
                 for(int i=0;i<dirs.Length;i++)
                 {
                     
-                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
-                    foreach (FileInfo info2 in info)
+                    foreach (Fileformationo info2 in info)
                     {
                         if(info2._name==info1._name&&info2._extension==info1._extension)
                         {
@@ -90,7 +128,8 @@ namespace WpfApp1
                         info.Add(info1);
                     }
                 }
-                foreach(FileInfo info2 in info)
+                listView.Items.Clear();
+                foreach (Fileformationo info2 in info)
                 {
                     listView.Items.Add(info2);
 
@@ -115,10 +154,10 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
-                    foreach (FileInfo info2 in info)
+                    foreach (Fileformationo info2 in info)
                     {
                         if (info2._name == info1._name && info2._extension == info1._extension)
                         {
@@ -132,7 +171,7 @@ namespace WpfApp1
                     }
                 }
                 listView.Items.Clear();
-                foreach (FileInfo info2 in info) 
+                foreach (Fileformationo info2 in info) 
                 {
                     listView.Items.Add(info2);
 
@@ -221,15 +260,45 @@ namespace WpfApp1
         }
         public void getPreviewFiles()
         {
-            foreach(FileInfo info1 in listView.Items)
+            foreach(Fileformationo info1 in listView.Items)
             {
                 info1.NewName = getPreview(info1.Name);
             }
             listView.Items.Refresh();
         }
-      
 
+        private void BatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Fileformationo file in listView.Items)
+            {
+                int countRule = 0;
+                foreach (IRenameRule rule in ruleSource)
+                {
+                    countRule++;
+                }
+                if (countRule == 0)
+                {
+                    MessageBox.Show("Please use at least one rule to batch", "Error");
+                    return;
+                }
 
+                try
+                {
+                    var newFile = new FileInfo(file.Directory + file.Name);
+                    var targetPlace = file.Directory + file.NewName;
+                    newFile.MoveTo(targetPlace);
+                    file.NewName=Path.GetFileName(targetPlace);
+                    file.Status = "Success";
+                    listView.Items.Refresh();
+                }
 
+                catch(FileNotFoundException)
+                {
+                    file.Status = "Cannot find file. Check your directory again";
+                    listView.Items.Refresh();
+                }
+
+            }
+        }
     }
 }

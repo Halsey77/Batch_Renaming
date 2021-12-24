@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace WpfApp1
 {
-    public class Fileformationo: INotifyPropertyChanged
+    public class FileInformation: INotifyPropertyChanged
     {
         public string _name;
         public string _newName;
@@ -11,7 +11,7 @@ namespace WpfApp1
         public string _directory;
         public string _extension;
 
-        public Fileformationo(string name, string newName, string status, string directory, string extension)
+        public FileInformation(string name, string newName, string status, string directory, string extension)
         {
             _name = name;
             _newName = newName;

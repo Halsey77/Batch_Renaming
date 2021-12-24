@@ -30,16 +30,17 @@ namespace WpfApp1
             RuleComboBox.ItemsSource = rules;
 
             //get presets in app.config (if exists)
-            string presets = ConfigurationManager.AppSettings["presets"];
-            if (!String.IsNullOrEmpty(presets))
-            {
-                string[] presetArr = presets.Split(';');
-                foreach (string s in presetArr)
-                {
-                    ruleSource.Add(factory.Create(s));
-                }
-            }
+            //string presets = ConfigurationManager.AppSettings["presets"];
+            //if (!String.IsNullOrEmpty(presets))
+            //{
+            //    string[] presetArr = presets.Split(';');
+            //    foreach (string s in presetArr)
+            //    {
+            //        ruleSource.Add(factory.Create(s));
+            //    }
+            //}
             RuleListBox.ItemsSource = ruleSource;
+            listView.ItemsSource = info;
 
          
             //set window previous size
@@ -71,11 +72,11 @@ namespace WpfApp1
                 var dirs = (string[])e.Data.GetData(DataFormats.FileDrop);
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
+                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
                         Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
-                    foreach (Fileformationo info2 in info)
+                    foreach (FileInformation info2 in info)
                     {
                         if (info2._name == info1._name && info2._extension == info1._extension)
                         {
@@ -91,7 +92,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Clear();
-                foreach (Fileformationo info2 in info)
+                foreach (FileInformation info2 in info)
                 {
                     listView.Items.Add(info2);
                 }
@@ -101,7 +102,7 @@ namespace WpfApp1
         }
 
 
-        BindingList<Fileformationo> info = new BindingList<Fileformationo>();
+        BindingList<FileInformation> info = new BindingList<FileInformation>();
 
         private void ClickBrowseFolders(object sender, RoutedEventArgs e)
         {
@@ -120,11 +121,11 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
+                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
                         Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
-                    foreach (Fileformationo info2 in info)
+                    foreach (FileInformation info2 in info)
                     {
                         if (info2._name == info1._name && info2._extension == info1._extension)
                         {
@@ -139,13 +140,14 @@ namespace WpfApp1
                     }
                 }
 
-                listView.Items.Clear();
-                foreach (Fileformationo info2 in info)
-                {
-                    listView.Items.Add(info2);
-                }
+                //listView.Items.Clear();
+                //foreach (FileInformation info2 in info)
+                //{
+                //    listView.Items.Add(info2);
+                //}
 
                 DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+                listView.Items.Refresh();
             }
         }
 
@@ -165,11 +167,11 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    Fileformationo info1 = new Fileformationo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
+                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
                         Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
-                    foreach (Fileformationo info2 in info)
+                    foreach (FileInformation info2 in info)
                     {
                         if (info2._name == info1._name && info2._extension == info1._extension)
                         {
@@ -184,16 +186,56 @@ namespace WpfApp1
                     }
                 }
 
-                listView.Items.Clear();
-                foreach (Fileformationo info2 in info)
-                {
-                    listView.Items.Add(info2);
-                }
+                //listView.Items.Clear();
+                //foreach (FileInformation info2 in info)
+                //{
+                //    listView.Items.Add(info2);
+                //}
 
                 DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+                listView.Items.Refresh();
             }
         }
+        private void ClickBrowseFilesInFolder(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.InitialDirectory = "D:\\";
+            dialog.Multiselect = true;
+            dialog.IsFolderPicker = true;
+            bool exist = false;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                var fileNames = dialog.FileNames;
 
+                var dirs = dialog.FileNames.ToArray();
+                for (int i = 0; i < dirs.Length; i++)
+                {
+                    foreach (var dir in Directory.GetFiles(dirs[i]))
+                    {
+                        FileInformation info1 = new FileInformation(Path.GetFileName(dir), Path.GetFileName(dir), "",
+                           Path.GetDirectoryName(dir), Path.GetExtension(dir));
+                        exist = false;
+                        // kiem tra file da ton tai chua 
+                        foreach (FileInformation info2 in info)
+                        {
+                            if (info2._name == info1._name && info2._extension == info1._extension)
+                            {
+                                exist = true;
+                                break;
+                            }
+                        }
+
+                        if (exist == false)
+                        {
+                            info.Add(info1);
+                        }
+
+                    }
+                }
+                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+                listView.Items.Refresh();
+            }
+        }
         private void ClickRefreshButton(object sender, RoutedEventArgs e)
         {
             if (info.Count > 0)
@@ -241,6 +283,14 @@ namespace WpfApp1
         {
             Window editWindow = new EditWindow();
             editWindow.ShowDialog();
+            var lines = File.ReadLines("rules.txt");
+            rules.Clear();
+            foreach (var line in lines)
+            {
+                rules.Add(factory.Create(line));
+            }
+            RuleComboBox.Items.Refresh();
+           
         }
 
         private void RemoveRule_Click(object sender, RoutedEventArgs e)
@@ -270,7 +320,7 @@ namespace WpfApp1
 
         public void getPreviewFiles()
         {
-            foreach (Fileformationo info1 in listView.Items)
+            foreach (FileInformation info1 in listView.Items)
             {
                 info1.NewName = getPreview(info1.Name);
             }
@@ -280,7 +330,7 @@ namespace WpfApp1
 
         private void BatchButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Fileformationo file in listView.Items)
+            foreach (FileInformation file in listView.Items)
             {
                 int countRule = 0;
                 foreach (IRenameRule rule in ruleSource)
@@ -321,8 +371,10 @@ namespace WpfApp1
             {
                 presets += ruleSource[i].ToString() + ";";
             }
-            presets += ruleSource[i].ToString();
-
+            if (ruleSource.Count > 0) 
+            {
+                presets += ruleSource[i].ToString();
+            }
             //get window size
             string windowWidth = Application.Current.MainWindow.Width.ToString();
             string windowHeight = Application.Current.MainWindow.Height.ToString();
@@ -346,5 +398,51 @@ namespace WpfApp1
             config.Save(ConfigurationSaveMode.Minimal);
             ConfigurationManager.RefreshSection("appSettings");
         }
+
+       
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = listView.SelectedItem as FileInformation;
+            if(selectedItem ==null)
+            {
+                MessageBox.Show("Please choose file to delete");
+            }    
+            else
+            {
+                info.Remove(selectedItem);
+                listView.Items.Refresh();
+            }
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            info.Clear();
+            listView.Items.Refresh();
+
+        }
+
+        private void ShowAbout_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Create by Pham Duy Minh - Tran Nhat Huy","About box");
+        }
+
+        private void ShowHelp_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Home tab is used for files and folders, Rules tab is used for rules which is applied for object", "Help Box", MessageBoxButton.OK,MessageBoxImage.Information);
+        }
+
+        private void LoadRule_Click(object sender, RoutedEventArgs e)
+        {
+            var lines = File.ReadLines("rules.txt");
+            rules.Clear();
+            foreach (var line in lines)
+            {
+                rules.Add(factory.Create(line));
+            }
+            RuleComboBox.Items.Refresh();
+        }
+
+        
     }
 }

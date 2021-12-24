@@ -27,25 +27,32 @@ namespace WpfApp1
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if(finderTextBox.Text== ""|| replacerTextBox.Text=="")
+            if (finderTextBox.Text == "" || replacerTextBox.Text == "" || prefixTextBox.Text == ""||suffixTextBox.Text=="")
             {
                 MessageBox.Show("Please enter all input required");
             }    
             else
             {
-                string lines = "Replacer " + finderTextBox.Text + " " + replacerTextBox.Text;
+                string line1 = "Replacer " + finderTextBox.Text + " " + replacerTextBox.Text;
+                string line2 = "SuffixCase " + suffixTextBox.Text;
+                string line3="PrefixCase " +prefixTextBox.Text;
                 List<string> quotelist = File.ReadAllLines("rules.txt").ToList();
-                foreach(string line in quotelist)
+                for(int i=0;i<quotelist.Count;i++)
                 {
 
-                    if(line.Contains("Replacer"))
+                    if(quotelist[i].Contains("Replacer")||quotelist[i].Contains("SuffixCase")||quotelist[i].Contains("PrefixCase"))
                     {
-                        quotelist.Remove(line);
-                        break;
+                        quotelist.RemoveAt(i);
+                        i--;
+                        
                     }
                 }
-                quotelist.Add(lines);
+                quotelist.Add(line1);
+                quotelist.Add(line2);
+                quotelist.Add(line3);
                 File.WriteAllLines("rules.txt", quotelist.ToArray());
+                DialogResult = true;
+                
 
             }
         }

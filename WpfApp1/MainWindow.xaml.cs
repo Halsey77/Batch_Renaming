@@ -74,7 +74,7 @@ namespace WpfApp1
                 for(int i=0;i<dirs.Length;i++)
                 {
                     
-                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), "", "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
                     foreach (FileInfo info2 in info)
@@ -115,7 +115,7 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), "", "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    FileInfo info1 = new FileInfo(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
                     foreach (FileInfo info2 in info)
@@ -170,6 +170,7 @@ namespace WpfApp1
             var instance = selectedRule.Clone();
             ruleSource.Add(instance);
             RuleListBox.Items.Refresh();
+            getPreviewFiles();
 
 
 
@@ -209,5 +210,26 @@ namespace WpfApp1
 
             }
         }
+        public string getPreview(string origin)
+        {
+            string result = origin;
+            foreach(IRenameRule rule in ruleSource)
+            {
+                result = rule.Process(origin);
+            }
+            return result;
+        }
+        public void getPreviewFiles()
+        {
+            foreach(FileInfo info1 in listView.Items)
+            {
+                info1.NewName = getPreview(info1.Name);
+            }
+            listView.Items.Refresh();
+        }
+      
+
+
+
     }
 }

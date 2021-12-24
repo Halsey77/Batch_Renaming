@@ -80,6 +80,7 @@
       <HintPath>D:\lap trinh windows\minh\RenameRule\RenameFactory\bin\Debug\SpecialCase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />

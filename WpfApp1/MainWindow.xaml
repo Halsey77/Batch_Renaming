@@ -44,16 +44,10 @@
                 <Fluent:RibbonGroupBox Header="Files">
                     <Fluent:Button Header="Add all Files in Folders" LargeIcon="icons/addFile.png" Margin="3, 0" Click="ClickBrowseFilesInFolder"/>
                     <Fluent:Button Header="Remove" LargeIcon="icons/removeFile.png" Margin="3, 0" Click="DeleteButton_Click"/>
-                    <Fluent:Button Header="Rename" LargeIcon="icons/edit.png" Margin="3, 0"/>
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Edit">
-                    <Fluent:Button Header="Copy" LargeIcon="icons/copy.png" Margin="3, 0"/>
-                    <Fluent:Button Header="Paste" LargeIcon="icons/paste.png" Margin="3, 0"/>
-                    <Fluent:Button Header="Cut" LargeIcon="icons/scissor.png" Margin="3, 0"/>
-                </Fluent:RibbonGroupBox>
+
                 <Fluent:RibbonGroupBox Header="Project">
                     <Fluent:Button Header="Refresh" LargeIcon="icons/refresh.png" Margin="3, 0" Click="RefreshButton_Click"/>
-                    <Fluent:Button Header="Preview" LargeIcon="icons/preview.png" Margin="3, 0"/>
                     <Fluent:Button Header="Run" LargeIcon="icons/play.png" Margin="3, 0" Click="BatchButton_Click"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Support">
@@ -90,14 +84,7 @@
             </Grid.RowDefinitions>
 
             <!-- Group Presets -->
-            <GroupBox Grid.Row="0" HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top" Width="272" FontSize="13" FontWeight="Bold">
-                <GroupBox.Header>
-                    Presets
-                </GroupBox.Header>
-                <Grid>
 
-                </Grid>
-            </GroupBox>
 
             <!-- 2 nut bam START va PREVIEW -->
             <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
@@ -152,21 +139,21 @@
             </ListView>
 
 
-            <GroupBox Header="Insert Rule" Canvas.Top="110" Height="57" Canvas.Left="33" Margin="24,10,8,96" Grid.Row="1"/>
-            <ComboBox Name ="RuleComboBox" Canvas.Left="45" Canvas.Top="153" SelectedIndex="0" Margin="31,32,65,101" Grid.Row="1" >
+            <GroupBox Header="Insert Rule" Canvas.Top="110" Canvas.Left="33" Margin="16,26,16,147" Grid.RowSpan="2"/>
+            <ComboBox Name ="RuleComboBox" Canvas.Left="45" Canvas.Top="153" SelectedIndex="0" Margin="31,50,65,0" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"/>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Button Name ="addRuleButton" Height="24"  Width="24" Background="{x:Null}" BorderBrush="White" Click="AddRuleButton_Click" Margin="232,35,34,104" Grid.Row="1"  >
+            <Button Name ="addRuleButton" Height="24"  Width="24" Background="{x:Null}" BorderBrush="White" Click="AddRuleButton_Click" Margin="232,53,34,3"   >
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/icons/add.png" Height="17" Width="16" RenderTransformOrigin="0.273,0.955"/>
                 </StackPanel>
             </Button>
 
-            <GroupBox Header="Rules List" Canvas.Left="33" Margin="22,67,34,3" Grid.RowSpan="2" Grid.Row="1"/>
+            <GroupBox Header="Rules List" Canvas.Left="33" Margin="22,38,34,3" Grid.RowSpan="2" Grid.Row="1"/>
             <ListBox Name="RuleListBox" Canvas.Left="45" Canvas.Top="214" Margin="53,87,65,10" Grid.RowSpan="2" Grid.Row="1">
                 <ListBox.ContextMenu>
                     <ContextMenu>

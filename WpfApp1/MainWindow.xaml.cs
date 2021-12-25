@@ -140,11 +140,7 @@ namespace WpfApp1
                     }
                 }
 
-                //listView.Items.Clear();
-                //foreach (FileInformation info2 in info)
-                //{
-                //    listView.Items.Add(info2);
-                //}
+           
 
                 DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();
@@ -186,11 +182,7 @@ namespace WpfApp1
                     }
                 }
 
-                //listView.Items.Clear();
-                //foreach (FileInformation info2 in info)
-                //{
-                //    listView.Items.Add(info2);
-                //}
+             
 
                 DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();

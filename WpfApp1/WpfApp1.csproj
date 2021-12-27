@@ -47,8 +47,16 @@
       <HintPath>..\packages\ControlzEx.5.0.1\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
     <Reference Include="CustomMarshalers" />
+    <Reference Include="ExtensionCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\ExtensionCase.dll</HintPath>
+    </Reference>
     <Reference Include="Fluent, Version=9.0.0.0, Culture=neutral, PublicKeyToken=3e436e32a8c5546f, processorArchitecture=MSIL">
       <HintPath>..\packages\Fluent.Ribbon.9.0.0\lib\net462\Fluent.dll</HintPath>
+    </Reference>
+    <Reference Include="LowerCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\LowerCase.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.4.0, Culture=neutral, PublicKeyToken=8985beaab7ea3f04, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft-WindowsAPICodePack-Core.1.1.4\lib\net472\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -62,15 +70,36 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="PerfectCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\PerfectCase.dll</HintPath>
+    </Reference>
+    <Reference Include="PrefixCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\PrefixCase.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyChanged, Version=3.4.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.4.0\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
-    <Reference Include="RenameFactory">
-      <HintPath>D:\lap trinh windows\minh\RenameRule\RenameFactory\bin\Debug\RenameFactory.dll</HintPath>
+    <Reference Include="RenameFactory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\RenameFactory.dll</HintPath>
     </Reference>
     <Reference Include="RenameRule, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\lap trinh windows\minh\RenameRule\RenameFactory\bin\Debug\RenameRule.dll</HintPath>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\RenameRule.dll</HintPath>
+    </Reference>
+    <Reference Include="Replacer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\Replacer.dll</HintPath>
+    </Reference>
+    <Reference Include="SpecialCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\SpecialCase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuffixCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\SuffixCase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -88,11 +117,13 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="UniqueCase">
-      <HintPath>D:\lap trinh windows\minh\RenameRule\RenameFactory\bin\Debug\UniqueCase.dll</HintPath>
+    <Reference Include="UniqueCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\UniqueCase.dll</HintPath>
     </Reference>
-    <Reference Include="UpperCase">
-      <HintPath>D:\lap trinh windows\minh\RenameRule\RenameFactory\bin\Debug\UpperCase.dll</HintPath>
+    <Reference Include="UpperCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\UpperCase.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />

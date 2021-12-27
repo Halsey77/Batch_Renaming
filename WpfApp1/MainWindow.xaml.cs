@@ -8,16 +8,22 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
+using Microsoft.Win32;
+using Application = System.Windows.Application;
+using DataFormats = System.Windows.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
+using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
 namespace WpfApp1
 {
     public partial class MainWindow : RibbonWindow
     {
-        private List<IRenameRule> rules = new List<IRenameRule>();
-        private List<IRenameRule> ruleSource = new List<IRenameRule>();
-
+        private List<IRenameRule> rules = new();
+        private List<IRenameRule> ruleSource = new();
         private RenameFactory.RenameFactory factory = RenameFactory.RenameFactory.getInstance();
+        BindingList<FileInformation> info = new();
 
         public MainWindow()
         {
@@ -29,20 +35,20 @@ namespace WpfApp1
             }
             RuleComboBox.ItemsSource = rules;
 
-            //get presets in app.config (if exists)
-            //string presets = ConfigurationManager.AppSettings["presets"];
-            //if (!String.IsNullOrEmpty(presets))
-            //{
-            //    string[] presetArr = presets.Split(';');
-            //    foreach (string s in presetArr)
-            //    {
-            //        ruleSource.Add(factory.Create(s));
-            //    }
-            //}
+            //get presets in app.config(if exists)
+            string presets = ConfigurationManager.AppSettings["presets"];
+            if (!String.IsNullOrEmpty(presets))
+            {
+                string[] presetArr = presets.Split(';');
+                foreach (string s in presetArr)
+                {
+                    ruleSource.Add(factory.Create(s));
+                }
+            }
             RuleListBox.ItemsSource = ruleSource;
+
             listView.ItemsSource = info;
 
-         
             //set window previous size
             string size = ConfigurationManager.AppSettings["windowSize"];
             if (!String.IsNullOrEmpty(size))
@@ -61,7 +67,6 @@ namespace WpfApp1
                 Application.Current.MainWindow.Left = Double.Parse(position[1]);
             }
         }
-
 
         private void ListView_Drop(object sender, DragEventArgs e)
         {
@@ -96,13 +101,8 @@ namespace WpfApp1
                 {
                     listView.Items.Add(info2);
                 }
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
             }
         }
-
-
-        BindingList<FileInformation> info = new BindingList<FileInformation>();
 
         private void ClickBrowseFolders(object sender, RoutedEventArgs e)
         {
@@ -113,7 +113,6 @@ namespace WpfApp1
             dialog.IsFolderPicker = true;
             bool exist = false;
 
-
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var fileNames = dialog.FileNames;
@@ -121,8 +120,8 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
-                        Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]),
+                        Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
                     foreach (FileInformation info2 in info)
@@ -140,9 +139,6 @@ namespace WpfApp1
                     }
                 }
 
-           
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();
             }
         }
@@ -182,9 +178,6 @@ namespace WpfApp1
                     }
                 }
 
-             
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();
             }
         }
@@ -224,7 +217,7 @@ namespace WpfApp1
 
                     }
                 }
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+                
                 listView.Items.Refresh();
             }
         }
@@ -259,10 +252,6 @@ namespace WpfApp1
             getPreviewFiles();
         }
 
-        private void IsActivate_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void AddRule_Click(object sender, RoutedEventArgs e)
         {
             if (RuleComboBox.IsDropDownOpen == false)
@@ -282,7 +271,6 @@ namespace WpfApp1
                 rules.Add(factory.Create(line));
             }
             RuleComboBox.Items.Refresh();
-           
         }
 
         private void RemoveRule_Click(object sender, RoutedEventArgs e)
@@ -358,15 +346,16 @@ namespace WpfApp1
         {
             //prepare preset string to save
             string presets = String.Empty;
-            int i = 0;
-            for (; i < ruleSource.Count - 1; i++)
+            if (ruleSource.Count > 0)
             {
-                presets += ruleSource[i].ToString() + ";";
-            }
-            if (ruleSource.Count > 0) 
-            {
+                int i = 0;
+                for (; i < ruleSource.Count - 1; i++)
+                {
+                    presets += ruleSource[i].ToString() + ";";
+                }
                 presets += ruleSource[i].ToString();
             }
+
             //get window size
             string windowWidth = Application.Current.MainWindow.Width.ToString();
             string windowHeight = Application.Current.MainWindow.Height.ToString();
@@ -379,19 +368,15 @@ namespace WpfApp1
 
             //Save all to app.config
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
             config.AppSettings.Settings.Remove("presets");
             config.AppSettings.Settings.Add("presets", presets);
             config.AppSettings.Settings.Remove("windowPos");
             config.AppSettings.Settings.Add("windowPos", pos);
             config.AppSettings.Settings.Remove("windowSize");
             config.AppSettings.Settings.Add("windowSize", size);
-
             config.Save(ConfigurationSaveMode.Minimal);
             ConfigurationManager.RefreshSection("appSettings");
         }
-
-       
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -411,12 +396,11 @@ namespace WpfApp1
         {
             info.Clear();
             listView.Items.Refresh();
-
         }
 
         private void ShowAbout_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Create by Pham Duy Minh - Tran Nhat Huy","About box");
+            MessageBox.Show("Created by Pham Duy Minh & Tran Nhat Huy","About box", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ShowHelp_Click(object sender, RoutedEventArgs e)
@@ -424,17 +408,73 @@ namespace WpfApp1
             MessageBox.Show("Home tab is used for files and folders, Rules tab is used for rules which is applied for object", "Help Box", MessageBoxButton.OK,MessageBoxImage.Information);
         }
 
-        private void LoadRule_Click(object sender, RoutedEventArgs e)
+        private void DeleteAllButton_Click(object sender, RoutedEventArgs e)
         {
-            var lines = File.ReadLines("rules.txt");
-            rules.Clear();
-            foreach (var line in lines)
-            {
-                rules.Add(factory.Create(line));
-            }
-            RuleComboBox.Items.Refresh();
+            info.Clear();
+            listView.Items.Refresh();
         }
 
-        
+        private void LoadPreset_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string presetFile = dialog.FileName;
+                var lines = File.ReadLines(presetFile);
+                ruleSource.Clear();
+                foreach (string s in lines)
+                {
+                    try
+                    {
+                        ruleSource.Add(factory.Create(s));
+                    }
+                    catch (Exception exception)
+                    {
+                        //do nothing. Continue the loop
+                    }
+                }
+            }
+
+            RuleListBox.Items.Refresh();
+        }
+
+        private void SavePreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (ruleSource.Count == 0)
+            {
+                MessageBox.Show("No rules to save into preset!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = "preset";
+                saveFileDialog.DefaultExt = ".txt";
+                saveFileDialog.Filter = "Text documents (.txt)|*.txt";
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        foreach (IRenameRule rule in ruleSource)
+                        {
+                            streamWriter.WriteLine(rule.ToString());
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RuleMenuItemDelete_OnClick(object sender, RoutedEventArgs e)
+        {
+            IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
+            ruleSource.Remove(selected);
+            RuleListBox.Items.Refresh();
+        }
+
+        private void RemoveAllRule_Click(object sender, RoutedEventArgs e)
+        {
+            ruleSource.Clear();
+            RuleListBox.Items.Refresh();
+        }
     }
 }

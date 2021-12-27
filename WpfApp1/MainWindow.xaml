@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         xmlns:Fluent="urn:fluent-ribbon"
-        
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Batch-Rename" Height="450" Width="830"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <Style x:Key="MyWaterMarkStyle" TargetType="{x:Type TextBox}">
@@ -42,14 +41,16 @@
             <!--Home Tabs-->
             <Fluent:RibbonTabItem Header="Home">
                 <Fluent:RibbonGroupBox Header="Files">
-                    <Fluent:Button Header="Add all Files in Folders" LargeIcon="icons/addFile.png" Margin="3, 0" Click="ClickBrowseFilesInFolder"/>
+                    <Fluent:Button Header="Add from folders" LargeIcon="icons/addFile.png" Margin="3, 0" Click="ClickBrowseFilesInFolder"/>
                     <Fluent:Button Header="Remove" LargeIcon="icons/removeFile.png" Margin="3, 0" Click="DeleteButton_Click"/>
+                    <Fluent:Button Header="Remove All" LargeIcon="icons/removeAll.png" Margin="3, 0" Click="DeleteAllButton_Click"/>
                 </Fluent:RibbonGroupBox>
 
                 <Fluent:RibbonGroupBox Header="Project">
                     <Fluent:Button Header="Refresh" LargeIcon="icons/refresh.png" Margin="3, 0" Click="RefreshButton_Click"/>
                     <Fluent:Button Header="Run" LargeIcon="icons/play.png" Margin="3, 0" Click="BatchButton_Click"/>
                 </Fluent:RibbonGroupBox>
+
                 <Fluent:RibbonGroupBox Header="Support">
                     <Fluent:Button Header="Help" LargeIcon="icons/help.png" Margin="3, 0" Click="ShowHelp_Click"/>
                     <Fluent:Button Header="About us" LargeIcon="icons/aboutus.png" Margin="3, 0" Click="ShowAbout_Click"/>
@@ -61,10 +62,12 @@
                 <Fluent:RibbonGroupBox Header="Editing">
                     <Fluent:Button Header="Add" LargeIcon="icons/plus.png" Margin="3, 0" Click="AddRule_Click"/>
                     <Fluent:Button Header="Remove" LargeIcon="icons/minus.png" Margin="3, 0" Click="RemoveRule_Click"/>
+                    <Fluent:Button Header="Remove All" LargeIcon="icons/removeAllRule.png" Margin="3, 0" Click="RemoveAllRule_Click"/>
                     <Fluent:Button Header="Edit" LargeIcon="icons/editRule.png" Margin="3, 0" Click="EditRule_Click"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Presets">
-                    <Fluent:Button Header="Load" LargeIcon="icons/import.png" Margin="3, 0" Click="LoadRule_Click"/>
+                    <Fluent:Button Header="Load" LargeIcon="icons/import.png" Margin="3, 0" Click="LoadPreset_Click"/>
+                    <Fluent:Button Header="Save" LargeIcon="icons/savePreset.png" Margin="3, 0" Click="SavePreset_Click"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <!--Rules Tabs end here-->
@@ -82,24 +85,6 @@
                 <RowDefinition Height = "*" />
                 <RowDefinition Height = "70"/>
             </Grid.RowDefinitions>
-
-            <!-- Group Presets -->
-
-
-            <!-- 2 nut bam START va PREVIEW -->
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-
-                <!--<Button Width="150" Height="50" Cursor="Hand" Margin="10 0 0 20" Name="BatchButton" Click="BatchButton_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="icons/tichxanh.png" Height="36" RenderOptions.BitmapScalingMode="HighQuality" Margin="-5 0 5 0"/>
-                    <TextBlock Text="START BATCH" VerticalAlignment="Center" FontWeight="ExtraBold" />
-                </StackPanel>
-            </Button>-->
-
-            </StackPanel>
-
-            <!-- TextBox Path va 2 button browse + refresh -->
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="14,20,5,35" x:Name="DirectoryofFile" TextWrapping="Wrap"  IsReadOnly="True" IsEnabled="False"/>
 
             <Canvas Grid.Column="2" Grid.Row="0">
                 <Button  Cursor="Hand" Height="30" Canvas.Top="18" Canvas.Left="5" Click="ClickBrowseFiles" >
@@ -126,50 +111,60 @@
 
             </Canvas>
 
-            <!-- LISTVIEW sieu to -->
-            <ListView Drop="ListView_Drop" AllowDrop="True"  Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Name="listView" Margin="14,53,13,8" >
+            <!-- LISTVIEW-->
+            <ListView Drop="ListView_Drop" AllowDrop="True"  Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="3" Name="listView" Margin="9,53,13.333,46" >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" Width="200" DisplayMemberBinding="{Binding Name}"/>
                         <GridViewColumn Header="New name" Width="200" DisplayMemberBinding="{Binding NewName}" />
                         <GridViewColumn Header="Extension" Width="80" DisplayMemberBinding="{Binding Extension}"/>
+                        <GridViewColumn Header="Directory" Width="250" DisplayMemberBinding="{Binding Directory}"/>
                         <GridViewColumn Header="Status" Width="80" DisplayMemberBinding="{Binding Status}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
 
+            <GroupBox Header="Insert Rule" Margin="5, 5">
+                <DockPanel LastChildFill="true">
+                    <Button Name ="addRuleButton" Height="24"  Width="24" Background="{x:Null}" BorderBrush="White" Click="AddRuleButton_Click" DockPanel.Dock="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/icons/add.png" Height="17" Width="16" RenderTransformOrigin="0.273,0.955"/>
+                        </StackPanel>
+                    </Button>
+                    <ComboBox Name ="RuleComboBox" Margin="6, 10">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </DockPanel>
+            </GroupBox>
 
-            <GroupBox Header="Insert Rule" Canvas.Top="110" Canvas.Left="33" Margin="16,26,16,147" Grid.RowSpan="2"/>
-            <ComboBox Name ="RuleComboBox" Canvas.Left="45" Canvas.Top="153" SelectedIndex="0" Margin="31,50,65,0" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button Name ="addRuleButton" Height="24"  Width="24" Background="{x:Null}" BorderBrush="White" Click="AddRuleButton_Click" Margin="232,53,34,3"   >
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/icons/add.png" Height="17" Width="16" RenderTransformOrigin="0.273,0.955"/>
-                </StackPanel>
-            </Button>
+            <GroupBox Header="Rules List" Margin="5,5" Grid.RowSpan="2" Grid.Row="1">
+                <ListBox Name="RuleListBox" Margin="5, 5" Grid.RowSpan="2" Grid.Row="1">
+                    <ListBox.Resources>
+                        <ContextMenu x:Key="RulesContextMenu">
+                            <MenuItem Header="Remove" Click="RuleMenuItemDelete_OnClick"></MenuItem>
+                        </ContextMenu>
+                    </ListBox.Resources>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="ContextMenu" Value="{StaticResource RulesContextMenu}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Name}"/>
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
 
-            <GroupBox Header="Rules List" Canvas.Left="33" Margin="22,38,34,3" Grid.RowSpan="2" Grid.Row="1"/>
-            <ListBox Name="RuleListBox" Canvas.Left="45" Canvas.Top="214" Margin="53,87,65,10" Grid.RowSpan="2" Grid.Row="1">
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <WrapPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Name}"/>
-                        </WrapPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <Button Cursor="Hand" Name="BatchButton" Height="36" Width="168" Click="BatchButton_Click" Grid.Column="1" Grid.ColumnSpan="2" Margin="329,17,13,17" Grid.Row="2" >
-                <TextBlock FontSize="13" Text="Batch Filename" Height="20"></TextBlock>
+            <Button Cursor="Hand" Name="BatchButton" Click="BatchButton_Click" Grid.Column="2" Grid.Row="2" Margin="6.667,29.667,13.333,5.333">
+                <TextBlock FontSize="13" FontWeight="Bold" Text="RUN BATCH" Height="20"></TextBlock>
             </Button>
         </Grid>
     </DockPanel>

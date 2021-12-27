@@ -62,6 +62,7 @@
                 <Fluent:RibbonGroupBox Header="Editing">
                     <Fluent:Button Header="Add" LargeIcon="icons/plus.png" Margin="3, 0" Click="AddRule_Click"/>
                     <Fluent:Button Header="Remove" LargeIcon="icons/minus.png" Margin="3, 0" Click="RemoveRule_Click"/>
+                    <Fluent:Button Header="Remove All" LargeIcon="icons/removeAllRule.png" Margin="3, 0" Click="RemoveAllRule_Click"/>
                     <Fluent:Button Header="Edit" LargeIcon="icons/editRule.png" Margin="3, 0" Click="EditRule_Click"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Presets">
@@ -142,9 +143,16 @@
 
             <GroupBox Header="Rules List" Margin="5,5" Grid.RowSpan="2" Grid.Row="1">
                 <ListBox Name="RuleListBox" Margin="5, 5" Grid.RowSpan="2" Grid.Row="1">
-                    <ListBox.ContextMenu>
-                        <ContextMenu/>
-                    </ListBox.ContextMenu>
+                    <ListBox.Resources>
+                        <ContextMenu x:Key="RulesContextMenu">
+                            <MenuItem Header="Remove" Click="RuleMenuItemDelete_OnClick"></MenuItem>
+                        </ContextMenu>
+                    </ListBox.Resources>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="ContextMenu" Value="{StaticResource RulesContextMenu}"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel Orientation="Vertical">

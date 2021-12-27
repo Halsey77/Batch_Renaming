@@ -8,6 +8,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using Application = System.Windows.Application;
 using DataFormats = System.Windows.DataFormats;
@@ -461,6 +462,19 @@ namespace WpfApp1
                     }
                 }
             }
+        }
+
+        private void RuleMenuItemDelete_OnClick(object sender, RoutedEventArgs e)
+        {
+            IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
+            ruleSource.Remove(selected);
+            RuleListBox.Items.Refresh();
+        }
+
+        private void RemoveAllRule_Click(object sender, RoutedEventArgs e)
+        {
+            ruleSource.Clear();
+            RuleListBox.Items.Refresh();
         }
     }
 }

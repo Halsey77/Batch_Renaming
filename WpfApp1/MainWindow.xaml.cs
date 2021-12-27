@@ -140,6 +140,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
 
@@ -179,6 +180,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
         private void ClickBrowseFilesInFolder(object sender, RoutedEventArgs e)
@@ -218,6 +220,7 @@ namespace WpfApp1
                 }
                 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
         private void ClickRefreshButton(object sender, RoutedEventArgs e)
@@ -244,7 +247,7 @@ namespace WpfApp1
             var instance = selectedRule.Clone();
             ruleSource.Add(instance);
             RuleListBox.Items.Refresh();
-            getPreviewFiles();
+            getPreviewFiles(true);
         }
 
         private void AddRule_Click(object sender, RoutedEventArgs e)
@@ -288,7 +291,7 @@ namespace WpfApp1
             string result = origin;
             foreach (IRenameRule rule in ruleSource)
             {
-                result = rule.Process(origin);
+                result = rule.Process(result);
             }
 
             return result;

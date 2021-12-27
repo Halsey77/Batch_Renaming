@@ -8,14 +8,19 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Microsoft.Win32;
+using Application = System.Windows.Application;
+using DataFormats = System.Windows.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
+using MessageBox = System.Windows.MessageBox;
 using Path = System.IO.Path;
 
 namespace WpfApp1
 {
     public partial class MainWindow : RibbonWindow
     {
-        private List<IRenameRule> rules = new List<IRenameRule>();
-        private List<IRenameRule> ruleSource = new List<IRenameRule>();
+        private List<IRenameRule> rules = new();
+        private List<IRenameRule> ruleSource = new();
 
         private RenameFactory.RenameFactory factory = RenameFactory.RenameFactory.getInstance();
 
@@ -29,20 +34,19 @@ namespace WpfApp1
             }
             RuleComboBox.ItemsSource = rules;
 
-            //get presets in app.config (if exists)
-            //string presets = ConfigurationManager.AppSettings["presets"];
-            //if (!String.IsNullOrEmpty(presets))
-            //{
-            //    string[] presetArr = presets.Split(';');
-            //    foreach (string s in presetArr)
-            //    {
-            //        ruleSource.Add(factory.Create(s));
-            //    }
-            //}
+            //get presets in app.config(if exists)
+            string presets = ConfigurationManager.AppSettings["presets"];
+            if (!String.IsNullOrEmpty(presets))
+            {
+                string[] presetArr = presets.Split(';');
+                foreach (string s in presetArr)
+                {
+                    ruleSource.Add(factory.Create(s));
+                }
+            }
             RuleListBox.ItemsSource = ruleSource;
-            listView.ItemsSource = info;
 
-         
+            listView.ItemsSource = info;
             //set window previous size
             string size = ConfigurationManager.AppSettings["windowSize"];
             if (!String.IsNullOrEmpty(size))
@@ -96,8 +100,6 @@ namespace WpfApp1
                 {
                     listView.Items.Add(info2);
                 }
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
             }
         }
 
@@ -140,9 +142,6 @@ namespace WpfApp1
                     }
                 }
 
-           
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();
             }
         }
@@ -182,9 +181,6 @@ namespace WpfApp1
                     }
                 }
 
-             
-
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
                 listView.Items.Refresh();
             }
         }
@@ -224,7 +220,7 @@ namespace WpfApp1
 
                     }
                 }
-                DirectoryofFile.Text = Path.GetDirectoryName(dirs[0]);
+                
                 listView.Items.Refresh();
             }
         }
@@ -358,15 +354,16 @@ namespace WpfApp1
         {
             //prepare preset string to save
             string presets = String.Empty;
-            int i = 0;
-            for (; i < ruleSource.Count - 1; i++)
+            if (ruleSource.Count > 0)
             {
-                presets += ruleSource[i].ToString() + ";";
-            }
-            if (ruleSource.Count > 0) 
-            {
+                int i = 0;
+                for (; i < ruleSource.Count - 1; i++)
+                {
+                    presets += ruleSource[i].ToString() + ";";
+                }
                 presets += ruleSource[i].ToString();
             }
+
             //get window size
             string windowWidth = Application.Current.MainWindow.Width.ToString();
             string windowHeight = Application.Current.MainWindow.Height.ToString();
@@ -424,17 +421,60 @@ namespace WpfApp1
             MessageBox.Show("Home tab is used for files and folders, Rules tab is used for rules which is applied for object", "Help Box", MessageBoxButton.OK,MessageBoxImage.Information);
         }
 
-        private void LoadRule_Click(object sender, RoutedEventArgs e)
+        private void DeleteAllButton_Click(object sender, RoutedEventArgs e)
         {
-            var lines = File.ReadLines("rules.txt");
-            rules.Clear();
-            foreach (var line in lines)
-            {
-                rules.Add(factory.Create(line));
-            }
-            RuleComboBox.Items.Refresh();
+            info.Clear();
+            listView.Items.Refresh();
         }
 
-        
+        private void LoadPreset_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string presetFile = dialog.FileName;
+                var lines = File.ReadLines(presetFile);
+                ruleSource.Clear();
+                foreach (string s in lines)
+                {
+                    try
+                    {
+                        ruleSource.Add(factory.Create(s));
+                    }
+                    catch (Exception exception)
+                    {
+                        //do nothing. Continue the loop
+                    }
+                }
+            }
+
+            RuleListBox.Items.Refresh();
+        }
+
+        private void SavePreset_Click(object sender, RoutedEventArgs e)
+        {
+            if (ruleSource.Count == 0)
+            {
+                MessageBox.Show("No rules to save into preset!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = "preset";
+                saveFileDialog.DefaultExt = ".txt";
+                saveFileDialog.Filter = "Text documents (.txt)|*.txt";
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    using (var streamWriter = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        foreach (IRenameRule rule in ruleSource)
+                        {
+                            streamWriter.WriteLine(rule.ToString());
+                        }
+                    }
+                }
+            }
+        }
     }
 }

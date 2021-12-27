@@ -21,8 +21,8 @@ namespace WpfApp1
     {
         private List<IRenameRule> rules = new();
         private List<IRenameRule> ruleSource = new();
-
         private RenameFactory.RenameFactory factory = RenameFactory.RenameFactory.getInstance();
+        BindingList<FileInformation> info = new();
 
         public MainWindow()
         {
@@ -47,6 +47,7 @@ namespace WpfApp1
             RuleListBox.ItemsSource = ruleSource;
 
             listView.ItemsSource = info;
+
             //set window previous size
             string size = ConfigurationManager.AppSettings["windowSize"];
             if (!String.IsNullOrEmpty(size))
@@ -65,7 +66,6 @@ namespace WpfApp1
                 Application.Current.MainWindow.Left = Double.Parse(position[1]);
             }
         }
-
 
         private void ListView_Drop(object sender, DragEventArgs e)
         {
@@ -103,9 +103,6 @@ namespace WpfApp1
             }
         }
 
-
-        BindingList<FileInformation> info = new BindingList<FileInformation>();
-
         private void ClickBrowseFolders(object sender, RoutedEventArgs e)
         {
             // Add folders
@@ -115,7 +112,6 @@ namespace WpfApp1
             dialog.IsFolderPicker = true;
             bool exist = false;
 
-
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 var fileNames = dialog.FileNames;
@@ -123,8 +119,8 @@ namespace WpfApp1
                 var dirs = dialog.FileNames.ToArray();
                 for (int i = 0; i < dirs.Length; i++)
                 {
-                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]), Path.GetFileName(dirs[i]), "",
-                        Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
+                    FileInformation info1 = new FileInformation(Path.GetFileName(dirs[i]),
+                        Path.GetFileName(dirs[i]), "", Path.GetDirectoryName(dirs[i]), Path.GetExtension(dirs[i]));
                     exist = false;
                     // kiem tra file da ton tai chua 
                     foreach (FileInformation info2 in info)
@@ -255,10 +251,6 @@ namespace WpfApp1
             getPreviewFiles();
         }
 
-        private void IsActivate_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
         private void AddRule_Click(object sender, RoutedEventArgs e)
         {
             if (RuleComboBox.IsDropDownOpen == false)
@@ -278,7 +270,6 @@ namespace WpfApp1
                 rules.Add(factory.Create(line));
             }
             RuleComboBox.Items.Refresh();
-           
         }
 
         private void RemoveRule_Click(object sender, RoutedEventArgs e)
@@ -376,19 +367,15 @@ namespace WpfApp1
 
             //Save all to app.config
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
             config.AppSettings.Settings.Remove("presets");
             config.AppSettings.Settings.Add("presets", presets);
             config.AppSettings.Settings.Remove("windowPos");
             config.AppSettings.Settings.Add("windowPos", pos);
             config.AppSettings.Settings.Remove("windowSize");
             config.AppSettings.Settings.Add("windowSize", size);
-
             config.Save(ConfigurationSaveMode.Minimal);
             ConfigurationManager.RefreshSection("appSettings");
         }
-
-       
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -408,12 +395,11 @@ namespace WpfApp1
         {
             info.Clear();
             listView.Items.Refresh();
-
         }
 
         private void ShowAbout_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Create by Pham Duy Minh - Tran Nhat Huy","About box");
+            MessageBox.Show("Created by Pham Duy Minh & Tran Nhat Huy","About box", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ShowHelp_Click(object sender, RoutedEventArgs e)

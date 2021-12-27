@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp1"
         xmlns:Fluent="urn:fluent-ribbon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="830"
+        Title="Batch-Rename" Height="450" Width="830"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <Style x:Key="MyWaterMarkStyle" TargetType="{x:Type TextBox}">

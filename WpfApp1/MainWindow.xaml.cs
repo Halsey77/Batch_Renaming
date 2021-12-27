@@ -140,6 +140,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
 
@@ -179,6 +180,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
         private void ClickBrowseFilesInFolder(object sender, RoutedEventArgs e)
@@ -214,11 +216,11 @@ namespace WpfApp1
                         {
                             info.Add(info1);
                         }
-
                     }
                 }
                 
                 listView.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
         private void ClickRefreshButton(object sender, RoutedEventArgs e)
@@ -235,12 +237,8 @@ namespace WpfApp1
             }
             else
             {
-                MessageBox.Show("Khong co file hoac folder de refresh");
+                MessageBox.Show("There are no files to refresh!", "Attention", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
-        }
-
-        private void ContextMenuClearClicked(object sender, RoutedEventArgs e)
-        {
         }
 
         private void AddRuleButton_Click(object sender, RoutedEventArgs e)
@@ -249,7 +247,7 @@ namespace WpfApp1
             var instance = selectedRule.Clone();
             ruleSource.Add(instance);
             RuleListBox.Items.Refresh();
-            getPreviewFiles();
+            getPreviewFiles(true);
         }
 
         private void AddRule_Click(object sender, RoutedEventArgs e)
@@ -284,6 +282,7 @@ namespace WpfApp1
                 IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
                 ruleSource.Remove(selected);
                 RuleListBox.Items.Refresh();
+                getPreviewFiles(true);
             }
         }
 
@@ -292,20 +291,33 @@ namespace WpfApp1
             string result = origin;
             foreach (IRenameRule rule in ruleSource)
             {
-                result = rule.Process(origin);
+                result = rule.Process(result);
             }
 
             return result;
         }
 
-        public void getPreviewFiles()
+        public void getPreviewFiles(bool clearNewName = false)
         {
+            if (clearNewName)
+            {
+                clearNewNameForAllFiles();
+            }
+
             foreach (FileInformation info1 in listView.Items)
             {
-                info1.NewName = getPreview(info1.Name);
+                info1.NewName = getPreview(info1.NewName);
             }
 
             listView.Items.Refresh();
+        }
+
+        public void clearNewNameForAllFiles()
+        {
+            foreach (FileInformation info1 in listView.Items)
+            {
+                info1.NewName = info1.Name;
+            }
         }
 
         private void BatchButton_Click(object sender, RoutedEventArgs e)
@@ -468,12 +480,14 @@ namespace WpfApp1
         {
             IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
             ruleSource.Remove(selected);
+            getPreviewFiles(true);
             RuleListBox.Items.Refresh();
         }
 
         private void RemoveAllRule_Click(object sender, RoutedEventArgs e)
         {
             ruleSource.Clear();
+            getPreviewFiles(true);
             RuleListBox.Items.Refresh();
         }
     }

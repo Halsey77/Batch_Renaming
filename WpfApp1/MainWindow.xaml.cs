@@ -232,21 +232,8 @@ namespace WpfApp1
         }
         private void ClickRefreshButton(object sender, RoutedEventArgs e)
         {
-            //TODO: Sửa lỗi refresh button. Xóa đi nếu ko thực sự cần thiết.
-            if (info.Count > 0)
-            {
-                listView.Items.Clear();
-                foreach (var info1 in info)
-                {
-                    info1._status = "";
-                    info1._newName = "";
-                    listView.Items.Add(info1);
-                }
-            }
-            else
-            {
-                MessageBox.Show("There are no files to refresh!", "Attention", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-            }
+            info.Clear();
+            listView.Items.Refresh();
         }
 
         private void AddRuleButton_Click(object sender, RoutedEventArgs e)
@@ -335,30 +322,22 @@ namespace WpfApp1
 
         private void BatchButton_Click(object sender, RoutedEventArgs e)
         {
+            if (ruleSource.Count == 0)
+            {
+                MessageBox.Show("Please use at least one rule to batch", "Error");
+                return;
+            }
             foreach (FileInformation file in listView.Items)
             {
-                int countRule = 0;
-                foreach (IRenameRule rule in ruleSource)
-                {
-                    countRule++;
-                }
-
-                if (countRule == 0)
-                {
-                    MessageBox.Show("Please use at least one rule to batch", "Error");
-                    return;
-                }
-
                 try
                 {
-                    var newFile = new FileInfo(file.Directory + file.Name);
-                    var targetPlace = file.Directory + file.NewName;
+                    var newFile = new FileInfo(file.Directory + "\\" + file.Name);
+                    var targetPlace = file.Directory + "\\" + file.NewName;
                     newFile.MoveTo(targetPlace);
                     file.NewName = Path.GetFileName(targetPlace);
                     file.Status = "Success";
                     listView.Items.Refresh();
                 }
-
                 catch (FileNotFoundException)
                 {
                     file.Status = "Cannot find file. Check your directory again";

@@ -47,6 +47,9 @@
       <HintPath>..\packages\ControlzEx.5.0.1\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
     <Reference Include="CustomMarshalers" />
+    <Reference Include="EndCounterCase">
+      <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\EndCounterCase.dll</HintPath>
+    </Reference>
     <Reference Include="ExtensionCase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\User\OneDrive\Máy tính\dlls\ExtensionCase.dll</HintPath>

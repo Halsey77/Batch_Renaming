@@ -31,7 +31,14 @@ namespace WpfApp1
             var lines = File.ReadLines("rules.txt");
             foreach (var line in lines)
             {
-                rules.Add(factory.Create(line));
+                try
+                {
+                    rules.Add(factory.Create(line));
+                }
+                catch (Exception exception)
+                {
+                    //do nothing.
+                }
             }
             RuleComboBox.ItemsSource = rules;
 
@@ -140,7 +147,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
-                getPreviewFiles(true);
+                getPreviewFiles();
             }
         }
 
@@ -180,7 +187,7 @@ namespace WpfApp1
                 }
 
                 listView.Items.Refresh();
-                getPreviewFiles(true);
+                getPreviewFiles();
             }
         }
         private void ClickBrowseFilesInFolder(object sender, RoutedEventArgs e)
@@ -220,11 +227,12 @@ namespace WpfApp1
                 }
                 
                 listView.Items.Refresh();
-                getPreviewFiles(true);
+                getPreviewFiles();
             }
         }
         private void ClickRefreshButton(object sender, RoutedEventArgs e)
         {
+            //TODO: Sửa lỗi refresh button. Xóa đi nếu ko thực sự cần thiết.
             if (info.Count > 0)
             {
                 listView.Items.Clear();
@@ -247,7 +255,7 @@ namespace WpfApp1
             var instance = selectedRule.Clone();
             ruleSource.Add(instance);
             RuleListBox.Items.Refresh();
-            getPreviewFiles(true);
+            getPreviewFiles();
         }
 
         private void AddRule_Click(object sender, RoutedEventArgs e)
@@ -266,9 +274,18 @@ namespace WpfApp1
             rules.Clear();
             foreach (var line in lines)
             {
-                rules.Add(factory.Create(line));
+                var renameRule = factory.Create(line);
+                rules.Add(renameRule);
+                
+                //update existing rules in ruleSource (if found)
+                int index = ruleSource.FindIndex(r => r.Name == renameRule.Name);
+                if (index != -1)
+                {
+                    ruleSource[index] = renameRule;
+                }
             }
             RuleComboBox.Items.Refresh();
+            getPreviewFiles();
         }
 
         private void RemoveRule_Click(object sender, RoutedEventArgs e)
@@ -282,7 +299,7 @@ namespace WpfApp1
                 IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
                 ruleSource.Remove(selected);
                 RuleListBox.Items.Refresh();
-                getPreviewFiles(true);
+                getPreviewFiles();
             }
         }
 
@@ -297,13 +314,9 @@ namespace WpfApp1
             return result;
         }
 
-        public void getPreviewFiles(bool clearNewName = false)
+        public void getPreviewFiles()
         {
-            if (clearNewName)
-            {
-                clearNewNameForAllFiles();
-            }
-
+            clearNewNameForAllFiles();
             foreach (FileInformation info1 in listView.Items)
             {
                 info1.NewName = getPreview(info1.NewName);
@@ -480,14 +493,14 @@ namespace WpfApp1
         {
             IRenameRule selected = RuleListBox.SelectedItem as IRenameRule;
             ruleSource.Remove(selected);
-            getPreviewFiles(true);
+            getPreviewFiles();
             RuleListBox.Items.Refresh();
         }
 
         private void RemoveAllRule_Click(object sender, RoutedEventArgs e)
         {
             ruleSource.Clear();
-            getPreviewFiles(true);
+            getPreviewFiles();
             RuleListBox.Items.Refresh();
         }
     }

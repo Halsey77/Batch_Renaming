@@ -19,8 +19,20 @@
         <TextBlock TextWrapping="Wrap" FontSize="13" Width="70" Canvas.Left="201" Canvas.Top="253" Text="-Suffix:" />
         <TextBox Name="suffixTextBox" Width="275" Canvas.Left="282" Canvas.Top="252"></TextBox>
 
-        <TextBlock Background="#FFEDEDED" Canvas.Top="346" Foreground="#FFF8F8F8" Width="398" Height="53" Canvas.Left="201" />
-        <Button Name="saveButton" Content="Save" Height="24" Width="72" Canvas.Left="432" Canvas.Top="360" Click="SaveButton_Click"></Button>
-        <Button Name="cancelButton" IsCancel ="true" Content="Cancel" Canvas.Left="521" Canvas.Top="360" Height="24" Width="67" ></Button>
+        <TextBlock TextWrapping="Wrap" FontSize="13" Width="80" Canvas.Left="196" Canvas.Top="288" Text="-EndCounter:" Height="33" />
+        
+        <TextBlock TextWrapping="Wrap" FontSize="13" Width="80" Canvas.Left="196" Canvas.Top="318" Text="StartValue:" Height="33" />
+        <TextBox x:Name="startValue" Width="90" Canvas.Left="289" Canvas.Top="323"/>
+        
+        <TextBlock TextWrapping="Wrap" FontSize="13" Width="80" Canvas.Left="400" Canvas.Top="320" Text="Step:" Height="26" />
+        <TextBox x:Name="step" Width="90" Canvas.Left="453" Canvas.Top="323" RenderTransformOrigin="0.455,0.354"/>
+        
+        <TextBlock TextWrapping="Wrap" FontSize="13" Width="122" Canvas.Left="570" Canvas.Top="320" Text="NumberOfDigits" Height="33" />
+        <TextBox x:Name="NumberOfDigits" Width="76" Canvas.Left="692" Canvas.Top="323" RenderTransformOrigin="0.455,0.354"/>
+
+        <TextBlock Background="#FFEDEDED" Canvas.Top="360" Foreground="#FFF8F8F8" Width="398" Height="53" Canvas.Left="201" />
+        <Button Name="saveButton" Content="Save" Height="24" Width="72" Canvas.Left="433" Canvas.Top="372" Click="SaveButton_Click"></Button>
+        <Button Name="cancelButton" IsCancel ="true" Content="Cancel" Canvas.Left="520" Canvas.Top="372" Height="24" Width="67" ></Button>
+       
     </Canvas>
 </Window>

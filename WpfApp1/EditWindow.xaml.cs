@@ -27,7 +27,7 @@ namespace WpfApp1
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            if (finderTextBox.Text == "" || replacerTextBox.Text == "" || prefixTextBox.Text == ""||suffixTextBox.Text=="")
+            if (finderTextBox.Text == "" || replacerTextBox.Text == "" || prefixTextBox.Text == ""||suffixTextBox.Text==""||startValue.Text==""||step.Text==""||NumberOfDigits.Text=="")
             {
                 MessageBox.Show("Please enter all input required");
             }    
@@ -36,11 +36,12 @@ namespace WpfApp1
                 string line1 = "Replacer " + finderTextBox.Text + " " + replacerTextBox.Text;
                 string line2 = "SuffixCase " + suffixTextBox.Text;
                 string line3="PrefixCase " +prefixTextBox.Text;
+                string line4 = "EndCounterCase " + startValue.Text + " " + step.Text + " " + NumberOfDigits.Text;
                 List<string> quotelist = File.ReadAllLines("rules.txt").ToList();
                 for(int i=0;i<quotelist.Count;i++)
                 {
 
-                    if(quotelist[i].Contains("Replacer")||quotelist[i].Contains("SuffixCase")||quotelist[i].Contains("PrefixCase"))
+                    if(quotelist[i].Contains("Replacer")||quotelist[i].Contains("SuffixCase")||quotelist[i].Contains("PrefixCase")||quotelist[i].Contains("EndCounterCase"))
                     {
                         quotelist.RemoveAt(i);
                         i--;
@@ -50,6 +51,7 @@ namespace WpfApp1
                 quotelist.Add(line1);
                 quotelist.Add(line2);
                 quotelist.Add(line3);
+                quotelist.Add(line4);
                 File.WriteAllLines("rules.txt", quotelist.ToArray());
                 DialogResult = true;
                 
